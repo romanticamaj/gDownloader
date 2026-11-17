@@ -1,0 +1,35 @@
+# Dependencies and build output, once the workspace is implemented
+node_modules/
+.output/
+.wxt/
+dist/
+coverage/
+playwright-report/
+test-results/
+.playwright-mcp/
+artifacts/
+downloads/
+output/
+profiles/
+
+# Local credentials, logs and browser captures
+.env
+.env.*
+!.env.example
+cookies*.txt
+cookies*.json
+*.har
+*.log
+*.zip
+.DS_Store
+__pycache__/
+*.pyc
+
+# Downloaded media is not source code. Do not ignore all *.ts (TypeScript).
+*.mp4
+*.mkv
+*.webm
+*.m4s
+*.aac
+**/part-*.ts
+**/segments/
