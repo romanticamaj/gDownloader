@@ -6,6 +6,11 @@ A browser-first download manager designed around durable progress and reliable s
 
 [繁體中文](README.zh-TW.md) · [Architecture](docs/architecture.md) · [Roadmap](docs/roadmap.md) · [Contributing](CONTRIBUTING.md) · [Agent workflow](docs/contributing/agent-workflow.md)
 
+The proposed [video experience](docs/specs/video-download-experience.md) covers
+per-video actions, automatic names, concurrent jobs, expiry-aware recovery and
+chosen folders. See the [implementation gap review](docs/research/2026-11-17-video-capture-gap-review.md)
+and [acceptance gates](docs/testing/video-download-acceptance.md); these are not shipped features.
+
 ```text
 Discover resources → Download with bounded concurrency → Save progress to disk
                   → Assemble the file → Confirm the final save

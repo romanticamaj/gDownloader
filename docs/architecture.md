@@ -2,6 +2,11 @@
 
 Status: proposed foundation; only the reference experiment is executable today.
 
+The [video experience spec](specs/video-download-experience.md) owns detailed
+requirements; the [acceptance matrix](testing/video-download-acceptance.md) owns
+verification gates. Folder/export changes are in
+[decision 0002](decisions/0002-destination-backends.md).
+
 ## Dependency direction
 
 ```mermaid
@@ -44,6 +49,12 @@ recovery cases, not events to hide with a keepalive promise.
 - `JobRepository`: durable metadata, checkpoints and export references.
 - `SegmentStore`: commit/read/verify/delete app-owned fragment data.
 - `Exporter`: stage a final file, create a lease, initiate save, observe completion.
+- `VideoRegistry` / `SourceResolver`: associate document/element epochs with
+  candidate sources, representation identity and title evidence.
+- `SourceLease` / `RefreshProvider`: optional known expiry, declared access context
+  and supported refresh flow; never a generic signature generator.
+- `DestinationManager`: permission-checked target references, name reservations
+  and backend-specific export receipts.
 
 These are conceptual interfaces; don't publish a plugin ABI before the first
 working adapters stabilize. Remote configuration cannot contain executable code.
@@ -64,6 +75,13 @@ Granting host access does not fix all 403 responses, browser partitioning or
 expired signatures. Any page messaging path validates sender and allowed targets.
 [Chrome webRequest reference](https://developer.chrome.com/docs/extensions/reference/api/webRequest)
 
+Per-video overlays and the side panel consume the same registry. Frame-level
+network evidence alone cannot safely associate several playlists with several
+videos; ambiguous candidates require a chooser. Titles carry provenance and are
+frozen when enqueued. Global automatic discovery needs explicit site access;
+activeTab is a limited invocation mode. Keep Chrome runtime messaging as a small
+JSON control plane; creator-context byte transport is an unresolved spike.
+
 ## Job states and honest progress
 
 `queued → preparing → downloading → assembling → exporting → completed`
@@ -74,15 +92,18 @@ The domain implementation must define valid transitions and backend capabilities
 - A native single-file transfer uses Chrome's pause/resume support only when available.
 - Segment download progress is committed segments or known bytes, with unknown totals explicit.
 - 100% downloaded is not 100% saved. Assembly/export are visible phases.
-- `completed` requires a validated staged file and Chrome reporting a completed save.
+- `completed` requires a validated artifact and a backend-specific export receipt:
+  Chrome reporting completion, or a chosen-directory write closed and size-checked.
 - Source expiry preserves work and moves to `waiting_for_source`; it is not silently retried forever.
 
 ## Bounded storage and recovery
 
 Metadata goes into an IndexedDB repository; segment/output bytes use OPFS.
 Keep only a bounded request window and bounded segment buffers in memory.
-Default concurrency starts at three; limits are policy, not a universal browser
-connection-count claim. Apply backpressure during writes and assembly.
+Proposed limits start at two active jobs, six managed requests globally, three
+per job and one assembly. Native Chrome transfers have separate slot accounting.
+These are unmeasured tuning policies, not universal browser connection limits.
+Apply byte-budget backpressure during reads, writes and assembly.
 
 Commit order: close/write-check the fragment or part, then advance the metadata
 checkpoint. On restart, reconcile missing, orphaned and truncated files. Include
@@ -93,6 +114,12 @@ An updated signed source can attach to an existing job only after validating med
 identity, rendition/track identity and segment layout. Do not globally strip URL
 queries and assume the bytes are identical. Ambiguous matches create a separate
 job or require an explicit supported recovery flow.
+
+Known source deadlines are checked at dispatch and recovery as well as by
+best-effort timers. Refresh providers are source-specific capabilities. Unknown
+expiry and unavailable refresh are explicit states; a 403 alone proves neither
+expiry nor the ability to renew. Managed HTTP resume verifies Range/If-Range
+semantics and validators before appending bytes.
 
 Quota exhaustion stops safely. Preserve incomplete work and offer explicit temp
 cleanup; no claim of unlimited disk space. Proposed retention defaults must be
@@ -115,8 +142,12 @@ revokes it only after confirmed completion, cancellation or a deliberate cleanup
 transition, never after an arbitrary 60-second timer. Interrupted export can be
 retried from the staged file without downloading every segment again.
 
-Browser default Downloads is the initial save route. Arbitrary native path selection
-is not assumed, and an iframe file picker is not part of the normal product flow.
+Support explicit Chrome Downloads and chosen-directory modes, subject to the
+capability gates. A top-level extension page owns user-gesture directory selection;
+persisted handle access is rechecked. The Downloads filename option is relative
+to Downloads, so managed HTTP streaming is required for arbitrary-folder jobs.
+Unavailable selected targets pause saves without silent fallback. Stream final
+bytes to a chosen handle, then close/verify; retain staging on failure.
 
 ## Verification
 

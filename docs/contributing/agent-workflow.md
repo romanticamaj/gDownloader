@@ -4,6 +4,12 @@
 repository instructions; Claude reads the same rules through the `@AGENTS.md`
 import in `CLAUDE.md`. Keep those rules in one place.
 
+Implementation is planned in the [M0–M4 task plan](../superpowers/plans/2026-11-17-extension-implementation.md).
+Resume from the [status/evidence ledger](../implementation/status.md), initially T0.
+That ledger includes a copyable future `/goal` and the parallel ownership rules.
+The plan specifies TDD cycles, contract/file ownership, commands to create and
+browser/native/large-output gates; those future commands are not available yet.
+
 ## A useful task handoff
 
 Describe the user-visible result, relevant supported input, existing failure and
@@ -23,6 +29,15 @@ An example for a future implementation task:
    failure, retained work and final-save behavior rather than only the happy path.
 5. Review the diff and update the support matrix/docs for actual delivered behavior.
 6. Report changed paths, executed evidence, untested limits and any remaining work.
+
+For video tasks, include requirement IDs from the
+[experience spec](../specs/video-download-experience.md) and test IDs from the
+[acceptance matrix](../testing/video-download-acceptance.md). A useful handoff names
+source/access context, selected representation, document/source epoch, destination
+backend, checkpoint and actual completion condition. State whether evidence comes
+from the prototype, an installed extension or a release environment. A docs check
+does not validate these behaviors. Keep pending product checks pending until the
+workspace and real test commands exist.
 
 ## Commands available now
 

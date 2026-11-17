@@ -4,6 +4,12 @@ Status: proposed design system and text wireframe. No implemented product screen
 
 ## Product experience
 
+Detailed behavior is owned by the [video experience spec](docs/specs/video-download-experience.md).
+The proposed entry flow adds a compact download action at each eligible video's
+upper right on hover/focus, with a keyboard-accessible label and a persistent
+side-panel alternative. Source ambiguity opens a chooser; it never silently
+downloads a different video. Fullscreen/PiP may require the toolbar fallback.
+
 The primary surface is a Chrome side panel, opened from the toolbar action.
 Keep the page visible while people choose resources or check transfers. Avoid a
 popup-only interface that disappears when focus moves. Use a full manager page
@@ -74,7 +80,9 @@ belong in optional diagnostics, not the default product flow.
 | Storage full | Explain temporary space needed | Manage temporary files |
 | Assembling | Final file is being prepared | Cancel |
 | Exporting | Downloaded bytes are not saved yet | Retry save on failure |
-| Completed | Browser confirmed final save | Show in folder |
+| Folder access needed | Chosen target needs access again | Grant folder access |
+| Target unavailable | Chosen disk/folder is unavailable; work retained | Reconnect or choose target |
+| Completed | Destination backend confirmed final save | Reveal file where supported |
 | Unsupported | State the unsupported format/capability | View details |
 
 Example Traditional Chinese recovery copy:
@@ -84,6 +92,14 @@ Example Traditional Chinese recovery copy:
 Do not call this “resume” when the backend must redownload from the beginning.
 Do not show a fixed ETA for an unknown or unstable total. Announce complete only
 after the save confirmation, not after the last HTTP response.
+
+Queue rows show the frozen editable title, selected quality, destination label and
+independent phase/progress. Several rows may download concurrently. Before enqueue,
+allow title/destination edits without showing protocol internals. Settings offers
+Chrome Downloads or a remembered chosen folder; an extension manager page owns
+the real directory-picker gesture. Do not silently switch targets when access is
+lost. Distinguish “refreshing source,” “needs a fresh source,” and “restart required”
+according to actual adapter capabilities.
 
 ## Accessibility and interaction
 

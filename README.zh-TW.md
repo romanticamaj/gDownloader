@@ -6,6 +6,8 @@
 
 [English](README.md) · [專案規劃](docs/plans/2026-11-17-project-foundation.md) · [架構](docs/architecture.md) · [開發路線](docs/roadmap.md) · [Agent 工作流程](docs/contributing/agent-workflow.md)
 
+新增的[影片下載規格](docs/specs/video-download-experience.md)涵蓋影片右上角按鈕、自動命名、多任務佇列、來源過期與指定目錄；[落差研究](docs/research/2026-11-17-video-capture-gap-review.md)和[驗收矩陣](docs/testing/video-download-acceptance.md)記錄尚缺實作與驗證。這些目前是規格，不是已完成的功能。
+
 ## 產品方向
 
 第一階段先做好 Chrome 擴充套件：找出可下載資源、管理任務、保留已完成分段，並確認最後確實存檔。之後以協定與傳輸介面擴充其他下載能力。

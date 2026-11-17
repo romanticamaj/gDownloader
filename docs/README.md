@@ -4,6 +4,12 @@
 |---|---|
 | [Foundation plan](plans/2026-11-17-project-foundation.md) | Scope, structure and decisions for review |
 | [Architecture](architecture.md) | Boundaries, lifecycle, storage and completion rules |
+| [Video experience spec](specs/video-download-experience.md) | Overlay, names, queue, source renewal and destination requirements |
+| [Video capability gap review](research/2026-11-17-video-capture-gap-review.md) | Current implementation gaps and primary-source constraints |
+| [Video acceptance matrix](testing/video-download-acceptance.md) | Required fixtures, failure cases and evidence levels |
+| [Extension implementation plan](superpowers/plans/2026-11-17-extension-implementation.md) | M0–M4 TDD tasks, contracts and parallel dependencies |
+| [Implementation status](implementation/status.md) | Next ready task, evidence ledger and future goal handoff |
+| [Destination decision](decisions/0002-destination-backends.md) | Chosen folders and backend-specific completion receipts |
 | [Roadmap](roadmap.md) | Staged delivery and release gates |
 | [Extension-first decision](decisions/0001-extension-first.md) | Alternatives and recommended approach |
 | [UI design](../DESIGN.md) | Side-panel flows, visual direction and accessibility |
